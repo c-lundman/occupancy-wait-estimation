@@ -64,6 +64,30 @@ Minimize weighted corrections from measured data:
 
 Optional regularization terms may be added to discourage unrealistic spikes in corrected flows.
 
+### QP Formulation Details
+
+Decision variables (unknowns solved by the optimizer):
+
+- `i_t`: corrected inflow at minute `t`
+- `o_t`: corrected outflow at minute `t`
+- `q_t`: corrected occupancy at minute `t`
+
+Why the constraints are linear:
+
+- Each constraint is a linear expression in the decision variables (no products or squares of variables).
+- Examples:
+- `q_t - q_{t-1} - i_t + o_t = 0`
+- `q_t >= 0`, `i_t >= 0`, `o_t >= 0`
+
+Why the objective is quadratic:
+
+- Data-fit terms use squared deviations:
+- `(i_t - i*_t)^2`, `(o_t - o*_t)^2`
+- Optional smoothness terms also use squared differences:
+- `(i_t - i_{t-1})^2`, `(o_t - o_{t-1})^2`
+
+This combination (quadratic objective + linear constraints) is a Quadratic Program (QP), which is convex in this setup. That gives a stable global optimum for nightly/batch estimation.
+
 ### Why this formulation
 
 - Produces physically plausible occupancy trajectories.
