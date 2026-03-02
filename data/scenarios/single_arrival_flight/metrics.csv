@@ -1,0 +1,3 @@
+scenario,inflow_pc,outflow_pc,Q_true,Q_method,PE,t_peak_true,t_peak_method,peak_time_error_min
+single_arrival_flight,PPC,PPC,124.0,123.99999999999986,1.1460366705808067e-13,2026-02-01 08:07:00,2026-02-01 08:07:00,0.0
+single_arrival_flight,RPC50L,PPC,124.0,67.29688782811782,45.728316267646925,2026-02-01 08:07:00,2026-02-01 08:06:00,-1.0

@@ -1,0 +1,10 @@
+{
+  "scenario": "single_arrival_flight",
+  "seed": 123,
+  "n_pax": 200,
+  "deboarding_minutes": 10.0,
+  "service_pax_per_min": 10.0,
+  "service_start_delay_min": 0.0,
+  "start_ts_utc": "2026-02-01T08:00:00Z",
+  "end_ts_utc": "2026-02-01T08:20:27.591550Z"
+}
