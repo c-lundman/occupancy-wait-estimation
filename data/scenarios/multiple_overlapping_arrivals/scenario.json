@@ -1,0 +1,29 @@
+{
+  "scenario": "multiple_overlapping_arrivals",
+  "seed": 2027,
+  "n_flights": 8,
+  "horizon_min": 180,
+  "service_pax_per_min": 11.0,
+  "flight_centers_min": [
+    6.87,
+    26.86,
+    40.39,
+    60.01,
+    77.82,
+    98.95,
+    110.33,
+    127.44
+  ],
+  "pax_per_flight": [
+    104,
+    138,
+    174,
+    190,
+    244,
+    178,
+    119,
+    116
+  ],
+  "start_ts_utc": "2026-02-03T08:00:00Z",
+  "end_ts_utc": "2026-02-03T10:14:10.150304Z"
+}
