@@ -21,6 +21,10 @@ class ReconcileConfig:
     relative_inflow_eps: float = 1.0
     relative_inflow_weight_min_scale: float = 0.25
     relative_inflow_weight_max_scale: float = 16.0
+    multiplicative_inflow_prior: bool = False
+    multiplicative_inflow_strength: float = 1.0
+    multiplicative_alpha_min: float = 0.0
+    multiplicative_alpha_max: float = 10.0
     adaptive_inflow_prior: bool = False
     activity_source: str = "max_io"
     activity_window: int = 7
@@ -134,6 +138,7 @@ def reconcile_minute_flows(
     i = cp.Variable(n)
     o = cp.Variable(n)
     q = cp.Variable(n)
+    alpha = cp.Variable() if cfg.multiplicative_inflow_prior else None
     w_in_vec = _compute_inflow_weight_vector(in_measured, out_measured, cfg)
     w_out_vec = np.full(n, float(cfg.w_out), dtype=float)
 
@@ -145,6 +150,11 @@ def reconcile_minute_flows(
         objective_terms.append(cfg.smooth_in * cp.sum_squares(i[1:] - i[:-1]))
     if cfg.smooth_out > 0 and n > 1:
         objective_terms.append(cfg.smooth_out * cp.sum_squares(o[1:] - o[:-1]))
+    if cfg.multiplicative_inflow_prior:
+        objective_terms.append(
+            float(cfg.multiplicative_inflow_strength)
+            * cp.sum_squares(i - alpha * in_measured)
+        )
 
     constraints = [
         q[0] == cfg.q0 + i[0] - o[0],
@@ -154,6 +164,10 @@ def reconcile_minute_flows(
         constraints.append(q[1:] == q[:-1] + i[1:] - o[1:])
     if cfg.nonnegative_flows:
         constraints.extend([i >= 0, o >= 0])
+    if cfg.multiplicative_inflow_prior:
+        constraints.append(alpha >= float(cfg.multiplicative_alpha_min))
+        if cfg.multiplicative_alpha_max > cfg.multiplicative_alpha_min:
+            constraints.append(alpha <= float(cfg.multiplicative_alpha_max))
 
     problem = cp.Problem(cp.Minimize(sum(objective_terms)), constraints)
     solve_kwargs = {
@@ -190,4 +204,6 @@ def reconcile_minute_flows(
             "occupancy_corrected_end": q_val,
         }
     )
+    if cfg.multiplicative_inflow_prior and alpha is not None and alpha.value is not None:
+        out["inflow_alpha"] = float(alpha.value)
     return out
