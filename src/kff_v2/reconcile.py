@@ -51,6 +51,31 @@ class ReconcileConfig:
     max_iter: int = 50_000
 
 
+def _validate_config(cfg: ReconcileConfig) -> None:
+    if cfg.w_in < 0 or cfg.w_out < 0:
+        raise ValueError("w_in and w_out must be non-negative.")
+    if cfg.smooth_in < 0 or cfg.smooth_out < 0:
+        raise ValueError("smooth_in and smooth_out must be non-negative.")
+    if cfg.multiplicative_inflow_strength < 0 or cfg.multiplicative_outflow_strength < 0:
+        raise ValueError("multiplicative strengths must be non-negative.")
+    if cfg.relative_inflow_eps <= 0 or cfg.relative_outflow_eps <= 0:
+        raise ValueError("relative eps values must be > 0.")
+    if cfg.activity_eps <= 0:
+        raise ValueError("activity_eps must be > 0.")
+    if cfg.activity_window < 1:
+        raise ValueError("activity_window must be >= 1.")
+    if cfg.activity_source not in {"in", "out", "sum_io", "max_io"}:
+        raise ValueError("activity_source must be one of: in, out, sum_io, max_io.")
+    if cfg.eps_abs <= 0 or cfg.eps_rel <= 0:
+        raise ValueError("solver eps_abs and eps_rel must be > 0.")
+    if cfg.max_iter < 1:
+        raise ValueError("max_iter must be >= 1.")
+    if cfg.multiplicative_alpha_max < cfg.multiplicative_alpha_min:
+        raise ValueError("multiplicative_alpha_max must be >= multiplicative_alpha_min.")
+    if cfg.multiplicative_beta_max < cfg.multiplicative_beta_min:
+        raise ValueError("multiplicative_beta_max must be >= multiplicative_beta_min.")
+
+
 def _compute_activity_proxy(
     in_measured: np.ndarray,
     out_measured: np.ndarray,
@@ -171,6 +196,7 @@ def reconcile_minute_flows(
         `occupancy_corrected_end`.
     """
     cfg = config or ReconcileConfig()
+    _validate_config(cfg)
     required_cols = {"minute_start_utc", "in_count", "out_count"}
     missing = required_cols - set(df.columns)
     if missing:
@@ -181,6 +207,10 @@ def reconcile_minute_flows(
 
     in_measured = work["in_count"].astype(float).to_numpy()
     out_measured = work["out_count"].astype(float).to_numpy()
+    if not np.isfinite(in_measured).all() or not np.isfinite(out_measured).all():
+        raise ValueError("Input in_count/out_count must be finite numeric values.")
+    if (in_measured < 0).any() or (out_measured < 0).any():
+        raise ValueError("Input in_count/out_count must be non-negative.")
     n = len(work)
     if n == 0:
         return pd.DataFrame(
