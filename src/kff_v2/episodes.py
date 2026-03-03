@@ -129,6 +129,7 @@ def reconcile_by_episodes(
     df: pd.DataFrame,
     reconcile_config: Optional[ReconcileConfig] = None,
     episode_config: Optional[EpisodeDetectConfig] = None,
+    episodes: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """Run QP reconciliation independently per detected episode."""
     work = df.sort_values("minute_start_utc").reset_index(drop=True).copy()
@@ -150,9 +151,9 @@ def reconcile_by_episodes(
         }
     )
 
-    episodes = detect_queue_episodes(work, config=episode_config)
+    episodes_df = episodes.copy() if episodes is not None else detect_queue_episodes(work, config=episode_config)
     cfg = reconcile_config or ReconcileConfig()
-    if episodes.empty:
+    if episodes_df.empty:
         # Fallback: if no episodes are detected, reconcile the full window so
         # occupancy still reflects the corrected in/out flows.
         rec = reconcile_minute_flows(
@@ -164,7 +165,7 @@ def reconcile_by_episodes(
         out.loc[:, "occupancy_corrected_end"] = rec["occupancy_corrected_end"].to_numpy()
         return out
 
-    for row in episodes.itertuples(index=False):
+    for row in episodes_df.itertuples(index=False):
         s = int(row.start_idx)
         e = int(row.end_idx)
         episode_df = work.loc[s:e, ["minute_start_utc", "in_count", "out_count"]].reset_index(drop=True)

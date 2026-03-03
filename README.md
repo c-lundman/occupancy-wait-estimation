@@ -222,6 +222,25 @@ queue_df = estimate_queue_from_timestamps(in_df, out_df)
 print(queue_df.head())
 ```
 
+Preset-based configuration example:
+
+```python
+import pandas as pd
+from kff_v2 import EstimateQueueOptions, estimate_queue_from_timestamps, make_reconcile_config
+
+opts = EstimateQueueOptions(
+    reconcile=make_reconcile_config("trust_outflow", w_in=1.0, w_out=100.0)
+)
+queue_df = estimate_queue_from_timestamps(in_df, out_df, options=opts)
+```
+
+Available presets:
+
+- `default`: recommended baseline for mixed quality flows.
+- `trust_outflow`: strong trust in outflow (e.g. PPC out + lossy inflow).
+- `balanced`: minimal priors, symmetric trust.
+- `aggressive_peak_fill`: stronger inflow peak reconstruction.
+
 ## Phased Roadmap
 
 1. Define synthetic generator and create perfect datasets.

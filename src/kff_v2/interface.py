@@ -9,6 +9,7 @@ import pandas as pd
 
 from kff_v2.episodes import EpisodeDetectConfig, detect_queue_episodes, reconcile_by_episodes
 from kff_v2.fifo import add_fifo_wait_columns
+from kff_v2.presets import make_reconcile_config
 from kff_v2.reconcile import ReconcileConfig, reconcile_minute_flows
 
 
@@ -20,27 +21,7 @@ class EstimateQueueOptions:
     out_timestamp_col: str = "timestamp"
     freq: str = "1min"
     use_episode_splitting: bool = True
-    reconcile: ReconcileConfig = ReconcileConfig(
-        q0=0.0,
-        w_in=1.0,
-        w_out=1.0,
-        relative_inflow_error=True,
-        relative_inflow_eps=0.01,
-        relative_inflow_weight_min_scale=0.25,
-        relative_inflow_weight_max_scale=16.0,
-        multiplicative_inflow_prior=True,
-        multiplicative_inflow_strength=2.0,
-        multiplicative_alpha_min=0.2,
-        multiplicative_alpha_max=4.0,
-        adaptive_inflow_prior=True,
-        activity_source="max_io",
-        activity_window=7,
-        activity_eps=0.5,
-        inflow_weight_min_scale=0.25,
-        inflow_weight_max_scale=4.0,
-        smooth_in=0.0,
-        smooth_out=0.0,
-    )
+    reconcile: ReconcileConfig = make_reconcile_config("default")
     episodes: EpisodeDetectConfig = EpisodeDetectConfig()
     include_fifo_wait: bool = True
 
@@ -163,6 +144,7 @@ def estimate_queue_from_timestamps(
             measured,
             reconcile_config=opts.reconcile,
             episode_config=opts.episodes,
+            episodes=episodes_df,
         )
     else:
         reconciled = reconcile_minute_flows(measured, config=opts.reconcile)
