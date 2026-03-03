@@ -9,7 +9,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from kff_v2 import EpisodeDetectConfig, EstimateQueueOptions, ReconcileConfig, detect_queue_episodes, estimate_queue_from_timestamps
+from kff_v2 import EpisodeDetectConfig, detect_queue_episodes, estimate_queue_from_timestamps
 
 
 def parse_args() -> argparse.Namespace:
@@ -56,30 +56,7 @@ def main() -> None:
     ep_cfg = EpisodeDetectConfig()
     episodes = detect_queue_episodes(measured, ep_cfg)
 
-    opts = EstimateQueueOptions(
-        reconcile=ReconcileConfig(
-            q0=0.0,
-            w_in=1.0,
-            w_out=100.0,
-            relative_inflow_error=True,
-            relative_inflow_eps=0.01,
-            relative_inflow_weight_min_scale=0.25,
-            relative_inflow_weight_max_scale=16.0,
-            multiplicative_inflow_prior=True,
-            multiplicative_inflow_strength=2.0,
-            multiplicative_alpha_min=0.2,
-            multiplicative_alpha_max=4.0,
-            adaptive_inflow_prior=True,
-            activity_source="out",
-            activity_window=7,
-            activity_eps=0.5,
-            inflow_weight_min_scale=0.25,
-            inflow_weight_max_scale=4.0,
-            smooth_in=0.0,
-            smooth_out=0.0,
-        )
-    )
-    queue = estimate_queue_from_timestamps(in_rpc, out_ppc, options=opts)
+    queue = estimate_queue_from_timestamps(in_rpc, out_ppc, w_in=1.0, w_out=100.0)
     q_idx = pd.DatetimeIndex(queue.index).tz_localize("UTC")
     q_corr = queue["Pax i kö"].copy()
     q_corr.index = q_idx
@@ -136,4 +113,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
