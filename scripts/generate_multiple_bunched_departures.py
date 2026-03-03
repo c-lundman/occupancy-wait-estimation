@@ -20,9 +20,9 @@ def _sample_passenger_arrivals_for_flight(
     t0: datetime,
     center_min: float,
     n_pax: int,
-    fwhm_min: float = 12.0,
-    low_clip_min: float = -28.0,
-    high_clip_min: float = 6.0,
+    fwhm_min: float = 40.0,
+    low_clip_min: float = -90.0,
+    high_clip_min: float = 15.0,
 ) -> list[datetime]:
     """Sample passenger arrivals around a flight center (departure-like spread)."""
     sigma = fwhm_min / 2.354820045
@@ -71,7 +71,7 @@ def generate_scenario(
 
     in_times: list[datetime] = []
     for c, p in zip(centers, pax_per_flight):
-        in_times.extend(_sample_passenger_arrivals_for_flight(rng, t0, c, p, fwhm_min=12.0))
+        in_times.extend(_sample_passenger_arrivals_for_flight(rng, t0, c, p, fwhm_min=40.0))
     in_times.sort()
 
     service_sec = 60.0 / service_pax_per_min

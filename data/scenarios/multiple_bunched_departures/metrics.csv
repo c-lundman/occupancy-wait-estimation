@@ -1,3 +1,3 @@
 scenario,inflow_pc,outflow_pc,Q_true,Q_method,PE,t_peak_true,t_peak_method,peak_time_error_min,w_in,w_out,relative_inflow_eps,multiplicative_strength
-multiple_bunched_departures,PPC,PPC,568.0,568.001154640561,-0.0002032817889130456,2026-02-05 09:27:00,2026-02-05 09:27:00,0.0,1.0,100.0,0.01,2.0
-multiple_bunched_departures,RPC50L,PPC,568.0,501.6496780582011,11.681394708063184,2026-02-05 09:27:00,2026-02-05 09:28:00,1.0,1.0,100.0,0.01,2.0
+multiple_bunched_departures,PPC,PPC,520.0,520.0019369106266,-0.000372482812801641,2026-02-05 09:21:00,2026-02-05 09:21:00,0.0,1.0,100.0,0.01,2.0
+multiple_bunched_departures,RPC50L,PPC,520.0,501.7971395667209,3.5005500833229064,2026-02-05 09:21:00,2026-02-05 09:11:00,-10.0,1.0,100.0,0.01,2.0
