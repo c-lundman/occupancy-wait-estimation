@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import estimate_queue_from_timestamps
+from kff_v2 import EstimateQueueOptions, ReconcileConfig, estimate_queue_from_timestamps
 
 
 def _load_events(path: Path) -> pd.DataFrame:
@@ -37,9 +37,33 @@ def main() -> None:
     q_true = float(q_true_series.max())
     t_peak_true = q_true_series.idxmax().tz_localize(None)
 
+    opts = EstimateQueueOptions(
+        reconcile=ReconcileConfig(
+            q0=0.0,
+            w_in=1.0,
+            w_out=100.0,
+            relative_inflow_error=True,
+            relative_inflow_eps=0.01,
+            relative_inflow_weight_min_scale=0.25,
+            relative_inflow_weight_max_scale=16.0,
+            multiplicative_inflow_prior=True,
+            multiplicative_inflow_strength=2.0,
+            multiplicative_alpha_min=0.2,
+            multiplicative_alpha_max=4.0,
+            adaptive_inflow_prior=True,
+            activity_source="out",
+            activity_window=7,
+            activity_eps=0.5,
+            inflow_weight_min_scale=0.25,
+            inflow_weight_max_scale=4.0,
+            smooth_in=0.0,
+            smooth_out=0.0,
+        )
+    )
+
     rows = []
     for inflow_name, in_df in [("PPC", in_ppc), ("RPC50L", in_rpc50)]:
-        queue = estimate_queue_from_timestamps(in_df, out_ppc)
+        queue = estimate_queue_from_timestamps(in_df, out_ppc, options=opts)
         q_method = float(queue["Pax i kö"].max()) if not queue.empty else 0.0
         t_peak_method = queue["Pax i kö"].idxmax() if not queue.empty else pd.NaT
         pe = 0.0 if q_true <= 0 else 100.0 * (q_true - q_method) / q_true
@@ -59,6 +83,10 @@ def main() -> None:
                 "t_peak_true": t_peak_true,
                 "t_peak_method": t_peak_method,
                 "peak_time_error_min": peak_time_err_min,
+                "w_in": 1.0,
+                "w_out": 100.0,
+                "relative_inflow_eps": 0.01,
+                "multiplicative_strength": 2.0,
             }
         )
 
@@ -73,4 +101,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

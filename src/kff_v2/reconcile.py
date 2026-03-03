@@ -22,7 +22,7 @@ class ReconcileConfig:
     relative_inflow_weight_min_scale: float = 0.25
     relative_inflow_weight_max_scale: float = 16.0
     multiplicative_inflow_prior: bool = False
-    multiplicative_inflow_strength: float = 1.0
+    multiplicative_inflow_strength: float = 2.0
     multiplicative_alpha_min: float = 0.0
     multiplicative_alpha_max: float = 10.0
     adaptive_inflow_prior: bool = False

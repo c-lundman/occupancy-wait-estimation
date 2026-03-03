@@ -46,6 +46,10 @@ def main() -> None:
             relative_inflow_eps=0.01,
             relative_inflow_weight_min_scale=0.25,
             relative_inflow_weight_max_scale=16.0,
+            multiplicative_inflow_prior=True,
+            multiplicative_inflow_strength=2.0,
+            multiplicative_alpha_min=0.2,
+            multiplicative_alpha_max=4.0,
             adaptive_inflow_prior=True,
             activity_source="out",
             activity_window=7,
@@ -82,6 +86,7 @@ def main() -> None:
                 "w_in": 1.0,
                 "w_out": 100.0,
                 "relative_inflow_eps": 0.01,
+                "multiplicative_strength": 2.0,
             }
         )
 
@@ -95,4 +100,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

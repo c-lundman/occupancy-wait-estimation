@@ -1,3 +1,3 @@
-scenario,inflow_pc,outflow_pc,Q_true,Q_method,PE,t_peak_true,t_peak_method,peak_time_error_min
-single_arrival_flight,PPC,PPC,124.0,123.99999999999999,1.1460366705808067e-14,2026-02-01 08:07:00,2026-02-01 08:07:00,0.0
-single_arrival_flight,RPC50L,PPC,124.0,87.88058907571536,29.12855719700374,2026-02-01 08:07:00,2026-02-01 08:07:00,0.0
+scenario,inflow_pc,outflow_pc,Q_true,Q_method,PE,t_peak_true,t_peak_method,peak_time_error_min,w_in,w_out,relative_inflow_eps,multiplicative_strength
+single_arrival_flight,PPC,PPC,124.0,123.99999999999979,1.7190550058712102e-13,2026-02-01 08:07:00,2026-02-01 08:07:00,0.0,1.0,100.0,0.01,2.0
+single_arrival_flight,RPC50L,PPC,124.0,119.60134015112213,3.5473063297402176,2026-02-01 08:07:00,2026-02-01 08:07:00,0.0,1.0,100.0,0.01,2.0
