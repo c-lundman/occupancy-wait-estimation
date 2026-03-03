@@ -13,8 +13,8 @@ def test_fifo_wait_single_segment_simple_shift() -> None:
     )
     out = add_fifo_wait_columns(df)
     waits = out["Väntetid"].tolist()
-    assert pd.isna(waits[0])
-    assert pd.isna(waits[1])
+    assert waits[0] == 0.0
+    assert waits[1] == 0.0
     assert abs(waits[2] - 2.0) < 1e-9
     assert abs(waits[3] - 2.0) < 1e-9
 

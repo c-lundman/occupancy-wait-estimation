@@ -210,7 +210,7 @@ Primary API for timestamp inputs:
 
 - minute-based FIFO waiting time for pax just exiting during that minute,
 - computed after queue correction,
-- `NaN` for minutes where corrected outflow is zero.
+- `0` for minutes where corrected outflow is zero.
 
 Minimal interface example:
 

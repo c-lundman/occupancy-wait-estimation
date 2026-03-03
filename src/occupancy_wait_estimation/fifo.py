@@ -15,7 +15,7 @@ def _fifo_wait_single_segment(
 ) -> np.ndarray:
     """Compute minute-based FIFO waiting times for one contiguous segment."""
     n = len(in_flow)
-    wait_minutes = np.full(n, np.nan, dtype=float)
+    wait_minutes = np.zeros(n, dtype=float)
     if n == 0:
         return wait_minutes
 
@@ -57,7 +57,7 @@ def add_fifo_wait_columns(
         raise ValueError(f"Missing required columns for FIFO reconstruction: {sorted(missing)}")
 
     out = df.copy().reset_index(drop=True)
-    out[wait_col] = np.nan
+    out[wait_col] = 0.0
 
     if use_episode_boundaries:
         has_episode = episode_col in out.columns
