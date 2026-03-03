@@ -196,6 +196,7 @@ Current outputs:
 Primary API for timestamp inputs:
 
 - `estimate_queue_from_timestamps(in_df, out_df, options=None, w_in=..., w_out=..., multiplicative_strength=..., use_episode_splitting=..., include_fifo_wait=..., return_debug=False)`
+- effective compact defaults: `w_in=1.0`, `w_out=1.0`, `multiplicative_strength=2.0`, `use_episode_splitting=True`, `include_fifo_wait=True`
 - default output index: `Tid`
 - default output columns:
 - `Pax i kö`,

@@ -127,6 +127,9 @@ def estimate_queue_from_timestamps(
     Minimal interface (recommended):
     - `w_in`, `w_out`, `multiplicative_strength`,
       `use_episode_splitting`, `include_fifo_wait`
+    - Parameters set to `None` use effective defaults:
+      `w_in=1.0`, `w_out=1.0`, `multiplicative_strength=2.0`,
+      `use_episode_splitting=True`, `include_fifo_wait=True`.
 
     Advanced interface:
     - pass `options=EstimateQueueOptions(...)`
