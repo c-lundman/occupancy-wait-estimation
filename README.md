@@ -1,6 +1,8 @@
-# kff-v2
+# occupancy-wait-estimation
 
-Queue Flow Reconciliation and FIFO Wait Estimation for airport areas (e.g., border control), using timestamped in/out person-count events.
+Occupancy and FIFO Wait Estimation for airport areas (e.g., border control), using timestamped in/out person-count events.
+
+Python import path remains `kff_v2`.
 
 ## Purpose
 

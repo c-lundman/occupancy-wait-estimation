@@ -3,14 +3,14 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kff-v2"
+name = "occupancy-wait-estimation"
 version = "0.1.1"
-description = "Queue flow reconciliation and FIFO wait estimation from noisy in/out person counts."
+description = "Occupancy and wait estimation from noisy in/out person counts."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [
-  { name = "kff-v2 contributors" }
+  { name = "occupancy-wait-estimation contributors" }
 ]
 dependencies = [
   "numpy>=1.26",
