@@ -29,4 +29,4 @@ __all__ = [
     "reconcile_minute_flows",
     "wait_time_metrics",
 ]
-__version__ = "0.1.1"
+__version__ = "0.1.2"

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "occupancy-wait-estimation"
-version = "0.1.1"
+version = "0.1.2"
 description = "Occupancy and wait estimation from noisy in/out person counts."
 readme = "README.md"
 requires-python = ">=3.10"
