@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import Literal, Optional
+from typing import Optional
+import warnings
 
 import pandas as pd
 
@@ -11,8 +12,6 @@ from kff_v2.episodes import EpisodeDetectConfig, detect_queue_episodes, reconcil
 from kff_v2.fifo import add_fifo_wait_columns
 from kff_v2.presets import make_reconcile_config
 from kff_v2.reconcile import ReconcileConfig, reconcile_minute_flows
-
-TrustMode = Literal["default", "outflow", "inflow", "balanced"]
 
 
 @dataclass(frozen=True)
@@ -115,7 +114,7 @@ def estimate_queue_from_timestamps(
     out_df: pd.DataFrame,
     options: Optional[EstimateQueueOptions] = None,
     *,
-    trust: TrustMode | None = None,
+    trust: str | None = None,
     w_in: float | None = None,
     w_out: float | None = None,
     multiplicative_strength: float | None = None,
@@ -126,8 +125,7 @@ def estimate_queue_from_timestamps(
     """Estimate corrected minute queue series from in/out timestamp DataFrames.
 
     Minimal interface (recommended):
-    - `trust`: one of `default`, `outflow`, `inflow`, `balanced`
-    - optional overrides: `w_in`, `w_out`, `multiplicative_strength`,
+    - `w_in`, `w_out`, `multiplicative_strength`,
       `use_episode_splitting`, `include_fifo_wait`
 
     Advanced interface:
@@ -158,14 +156,25 @@ def estimate_queue_from_timestamps(
     if options is not None:
         opts = options
     else:
-        preset = {
-            None: "default",
-            "default": "default",
-            "outflow": "trust_outflow",
-            "inflow": "trust_inflow",
-            "balanced": "balanced",
-        }[trust]
-        rec = make_reconcile_config(preset)
+        rec = make_reconcile_config("default")
+        if trust is not None:
+            warnings.warn(
+                "`trust` is deprecated; use explicit `w_in` and `w_out` instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            trust_to_weights = {
+                "default": (1.0, 1.0),
+                "balanced": (1.0, 1.0),
+                "outflow": (1.0, 100.0),
+                "inflow": (100.0, 1.0),
+            }
+            if trust not in trust_to_weights:
+                raise ValueError(
+                    "Invalid `trust` value. Expected one of: default, balanced, outflow, inflow."
+                )
+            w_in_def, w_out_def = trust_to_weights[trust]
+            rec = replace(rec, w_in=w_in_def, w_out=w_out_def)
         if w_in is not None:
             rec = replace(rec, w_in=float(w_in))
         if w_out is not None:

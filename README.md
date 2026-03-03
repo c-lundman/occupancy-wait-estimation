@@ -195,7 +195,7 @@ Current outputs:
 
 Primary API for timestamp inputs:
 
-- `estimate_queue_from_timestamps(in_df, out_df, options=None, trust=..., w_in=..., w_out=..., multiplicative_strength=..., use_episode_splitting=..., include_fifo_wait=..., return_debug=False)`
+- `estimate_queue_from_timestamps(in_df, out_df, options=None, w_in=..., w_out=..., multiplicative_strength=..., use_episode_splitting=..., include_fifo_wait=..., return_debug=False)`
 - default output index: `Tid`
 - default output columns:
 - `Pax i kö`,
@@ -221,7 +221,6 @@ out_df = pd.DataFrame({"timestamp": ["2026-01-20T06:01:10Z"]})
 queue_df = estimate_queue_from_timestamps(
     in_df,
     out_df,
-    trust="outflow",
     w_in=1.0,
     w_out=100.0,
     multiplicative_strength=2.0,
@@ -242,12 +241,13 @@ queue_df = estimate_queue_from_timestamps(in_df, out_df, options=opts)
 ```
 
 Note: use either compact arguments or `options`, not both in the same call.
+`trust=...` is kept for backward compatibility but deprecated; prefer explicit `w_in`/`w_out`.
 
-Available presets:
+Available presets (advanced/internal convenience):
 
 - `default`: recommended baseline for mixed quality flows.
-- `trust_outflow`: strong trust in outflow (e.g. PPC out + lossy inflow).
-- `trust_inflow`: strong trust in inflow (mirror case: reliable inflow, noisier outflow).
+- `trust_outflow`: same as default with `w_in=1.0`, `w_out=100.0`.
+- `trust_inflow`: same as default with `w_in=100.0`, `w_out=1.0`.
 - `balanced`: minimal priors, symmetric trust.
 - `aggressive_peak_fill`: stronger inflow peak reconstruction.
 

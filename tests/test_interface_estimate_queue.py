@@ -126,13 +126,12 @@ def test_estimate_queue_small_case_has_consistent_occupancy() -> None:
     assert waits[3] == 3.0
 
 
-def test_estimate_queue_compact_interface_supports_trust_and_overrides() -> None:
+def test_estimate_queue_compact_interface_supports_weight_overrides() -> None:
     in_df = pd.DataFrame({"timestamp": ["2026-01-20T06:00:05Z", "2026-01-20T06:01:05Z"]})
     out_df = pd.DataFrame({"timestamp": ["2026-01-20T06:02:05Z"]})
     queue = estimate_queue_from_timestamps(
         in_df,
         out_df,
-        trust="outflow",
         w_in=1.0,
         w_out=100.0,
         multiplicative_strength=2.0,
@@ -148,7 +147,7 @@ def test_estimate_queue_rejects_mixing_options_and_compact_args() -> None:
     out_df = pd.DataFrame({"timestamp": ["2026-01-20T06:01:05Z"]})
     opts = EstimateQueueOptions()
     try:
-        estimate_queue_from_timestamps(in_df, out_df, options=opts, trust="outflow")
+        estimate_queue_from_timestamps(in_df, out_df, options=opts, w_out=100.0)
     except ValueError as exc:
         assert "either `options` or compact arguments" in str(exc)
         return
