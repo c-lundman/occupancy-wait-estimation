@@ -28,20 +28,20 @@ class EstimateQueueOptions:
 
 
 def _build_minute_flows(
-    in_df: pd.DataFrame,
-    out_df: pd.DataFrame,
+    inflow: pd.DataFrame,
+    outflow: pd.DataFrame,
     options: EstimateQueueOptions,
 ) -> pd.DataFrame:
-    if options.in_timestamp_col not in in_df.columns:
-        raise ValueError(f"in_df missing timestamp column: {options.in_timestamp_col}")
-    if options.out_timestamp_col not in out_df.columns:
-        raise ValueError(f"out_df missing timestamp column: {options.out_timestamp_col}")
+    if options.in_timestamp_col not in inflow.columns:
+        raise ValueError(f"inflow missing timestamp column: {options.in_timestamp_col}")
+    if options.out_timestamp_col not in outflow.columns:
+        raise ValueError(f"outflow missing timestamp column: {options.out_timestamp_col}")
 
     in_ts = pd.to_datetime(
-        in_df[options.in_timestamp_col], utc=True, errors="coerce", format="mixed"
+        inflow[options.in_timestamp_col], utc=True, errors="coerce", format="mixed"
     ).dropna()
     out_ts = pd.to_datetime(
-        out_df[options.out_timestamp_col], utc=True, errors="coerce", format="mixed"
+        outflow[options.out_timestamp_col], utc=True, errors="coerce", format="mixed"
     ).dropna()
 
     if len(in_ts) == 0 and len(out_ts) == 0:
@@ -110,8 +110,8 @@ def _attach_episode_debug_columns(
 
 
 def estimate_queue_from_timestamps(
-    in_df: pd.DataFrame,
-    out_df: pd.DataFrame,
+    inflow: pd.DataFrame,
+    outflow: pd.DataFrame,
     options: Optional[EstimateQueueOptions] = None,
     *,
     trust: str | None = None,
@@ -204,7 +204,7 @@ def estimate_queue_from_timestamps(
             ),
         )
 
-    measured = _build_minute_flows(in_df, out_df, opts)
+    measured = _build_minute_flows(inflow, outflow, opts)
 
     if measured.empty:
         queue = pd.DataFrame(columns=["Pax i kö", "Pax ur kö", "Pax in i kö", "Väntetid"])

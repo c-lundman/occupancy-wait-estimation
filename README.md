@@ -195,7 +195,7 @@ Current outputs:
 
 Primary API for timestamp inputs:
 
-- `estimate_queue_from_timestamps(in_df, out_df, options=None, w_in=..., w_out=..., multiplicative_strength=..., use_episode_splitting=..., include_fifo_wait=..., return_debug=False)`
+- `estimate_queue_from_timestamps(inflow, outflow, options=None, w_in=..., w_out=..., multiplicative_strength=..., use_episode_splitting=..., include_fifo_wait=..., return_debug=False)`
 - effective compact defaults: `w_in=1.0`, `w_out=1.0`, `multiplicative_strength=2.0`, `use_episode_splitting=True`, `include_fifo_wait=True`
 - default output index: `Tid`
 - default output columns:
@@ -216,12 +216,12 @@ Minimal interface example:
 import pandas as pd
 from kff_v2 import estimate_queue_from_timestamps
 
-in_df = pd.DataFrame({"timestamp": ["2026-01-20T06:00:05Z", "2026-01-20T06:00:31Z"]})
-out_df = pd.DataFrame({"timestamp": ["2026-01-20T06:01:10Z"]})
+inflow = pd.DataFrame({"timestamp": ["2026-01-20T06:00:05Z", "2026-01-20T06:00:31Z"]})
+outflow = pd.DataFrame({"timestamp": ["2026-01-20T06:01:10Z"]})
 
 queue_df = estimate_queue_from_timestamps(
-    in_df,
-    out_df,
+    inflow,
+    outflow,
     w_in=1.0,
     w_out=100.0,
     multiplicative_strength=2.0,
@@ -238,7 +238,7 @@ from kff_v2 import EstimateQueueOptions, estimate_queue_from_timestamps, make_re
 opts = EstimateQueueOptions(
     reconcile=make_reconcile_config("trust_outflow", w_in=1.0, w_out=100.0)
 )
-queue_df = estimate_queue_from_timestamps(in_df, out_df, options=opts)
+queue_df = estimate_queue_from_timestamps(inflow, outflow, options=opts)
 ```
 
 Note: use either compact arguments or `options`, not both in the same call.
