@@ -7,7 +7,6 @@ from occupancy_wait_estimation import ReconcileConfig, reconcile_minute_flows
 def test_multiplicative_inflow_prior_promotes_proportional_scaling() -> None:
     # Synthetic case where true inflow is about 2x measured inflow profile.
     measured_in = np.array([1.0, 3.0, 6.0, 3.0, 1.0, 0.0, 0.0, 0.0])
-    true_in = 2.0 * measured_in
     measured_out = np.array([0.0, 0.0, 0.0, 2.0, 5.0, 4.0, 2.0, 1.0])
     # Keep outflow trusted and slightly high so inflow must be corrected upward.
     df = pd.DataFrame(
@@ -55,4 +54,3 @@ def test_multiplicative_inflow_prior_promotes_proportional_scaling() -> None:
     # Multiplicative prior should produce a flatter (more proportional) ratio profile.
     assert float(np.std(mul_ratio)) < float(np.std(base_ratio))
     assert "inflow_alpha" in mul.columns
-
