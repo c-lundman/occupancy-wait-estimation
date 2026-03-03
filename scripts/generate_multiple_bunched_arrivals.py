@@ -126,13 +126,27 @@ def make_rpc50l(in_times: list[datetime], seed: int = 999) -> list[datetime]:
     return [ts for ts in in_times if rng.random() >= 0.5]
 
 
+def make_flpc_limit_per_minute(in_times: list[datetime], *, max_pax_per_min: int) -> list[datetime]:
+    if max_pax_per_min < 0:
+        raise ValueError("max_pax_per_min must be non-negative")
+    if not in_times:
+        return []
+    ts = pd.Series(pd.to_datetime(in_times, utc=True)).sort_values()
+    minute = ts.dt.floor("1min")
+    keep = minute.groupby(minute).cumcount() < max_pax_per_min
+    return [x.to_pydatetime() for x in ts[keep]]
+
+
 def main() -> None:
     in_times, out_times, meta = generate_scenario()
     root = Path("data/scenarios/multiple_bunched_arrivals")
+    in_rpc50 = make_rpc50l(in_times)
+    in_flpc05 = make_flpc_limit_per_minute(in_times, max_pax_per_min=30)
 
     write_events(root / "PPC_in" / "events.csv", in_times)
     write_events(root / "PPC_out" / "events.csv", out_times)
-    write_events(root / "RPC50L_in" / "events.csv", make_rpc50l(in_times))
+    write_events(root / "RPC50L_in" / "events.csv", in_rpc50)
+    write_events(root / "FLPC05_in" / "events.csv", in_flpc05)
 
     with (root / "scenario.json").open("w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2)
@@ -141,7 +155,8 @@ def main() -> None:
     print(f"Wrote scenario to: {root}")
     print(f"PPC in events: {len(in_times)}")
     print(f"PPC out events: {len(out_times)}")
-    print(f"RPC50L in events: {len(make_rpc50l(in_times))}")
+    print(f"RPC50L in events: {len(in_rpc50)}")
+    print(f"FLPC05 in events: {len(in_flpc05)}")
 
 
 if __name__ == "__main__":

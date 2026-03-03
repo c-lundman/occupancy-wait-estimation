@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -16,28 +17,43 @@ def _bin_counts(df: pd.DataFrame, col: str = "timestamp") -> pd.Series:
     return ts.dt.floor("1min").value_counts().sort_index()
 
 
+def _parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser()
+    p.add_argument(
+        "--inflow-variant",
+        choices=["RPC50L", "FLPC05"],
+        default="RPC50L",
+        help="Inflow measurement variant to reconstruct from.",
+    )
+    return p.parse_args()
+
+
 def main() -> None:
+    args = _parse_args()
     root = Path("data/scenarios/multiple_bunched_arrivals")
-    out_png = Path("local/plots/multiple_bunched_arrivals_wout100_eps001_mult2_diagnostics.png")
+    inflow_dir = f"{args.inflow_variant}_in"
+    out_png = Path(
+        f"local/plots/multiple_bunched_arrivals_{args.inflow_variant.lower()}_wout100_eps001_mult2_diagnostics.png"
+    )
     out_png.parent.mkdir(parents=True, exist_ok=True)
 
     in_ppc = pd.read_csv(root / "PPC_in" / "events.csv")
-    in_rpc = pd.read_csv(root / "RPC50L_in" / "events.csv")
+    in_measured = pd.read_csv(root / inflow_dir / "events.csv")
     out_ppc = pd.read_csv(root / "PPC_out" / "events.csv")
 
     in_ppc_c = _bin_counts(in_ppc)
-    in_rpc_c = _bin_counts(in_rpc)
+    in_measured_c = _bin_counts(in_measured)
     out_ppc_c = _bin_counts(out_ppc)
 
     idx = pd.date_range(
-        start=min(in_ppc_c.index.min(), in_rpc_c.index.min(), out_ppc_c.index.min()),
-        end=max(in_ppc_c.index.max(), in_rpc_c.index.max(), out_ppc_c.index.max()),
+        start=min(in_ppc_c.index.min(), in_measured_c.index.min(), out_ppc_c.index.min()),
+        end=max(in_ppc_c.index.max(), in_measured_c.index.max(), out_ppc_c.index.max()),
         freq="1min",
         tz="UTC",
     )
 
     in_ppc_s = in_ppc_c.reindex(idx, fill_value=0).astype(float)
-    in_rpc_s = in_rpc_c.reindex(idx, fill_value=0).astype(float)
+    in_measured_s = in_measured_c.reindex(idx, fill_value=0).astype(float)
     out_ppc_s = out_ppc_c.reindex(idx, fill_value=0).astype(float)
     q_true = (in_ppc_s - out_ppc_s).cumsum()
 
@@ -64,7 +80,7 @@ def main() -> None:
             smooth_out=0.0,
         )
     )
-    queue = estimate_queue_from_timestamps(in_rpc, out_ppc, options=opts)
+    queue = estimate_queue_from_timestamps(in_measured, out_ppc, options=opts)
 
     q_idx = pd.DatetimeIndex(queue.index).tz_localize("UTC")
     corrected = queue.copy()
@@ -77,10 +93,10 @@ def main() -> None:
     fig, axes = plt.subplots(3, 1, figsize=(13, 9), sharex=True)
 
     axes[0].plot(x, in_ppc_s.values, label="PPC_in", linewidth=1.5)
-    axes[0].plot(x, in_rpc_s.values, label="RPC50L_in", linewidth=1.2)
+    axes[0].plot(x, in_measured_s.values, label=f"{args.inflow_variant}_in", linewidth=1.2)
     axes[0].plot(x, in_corr.values, label="Corrected inflow", linewidth=1.2)
     axes[0].set_ylabel("pax/min")
-    axes[0].set_title("Inflow")
+    axes[0].set_title(f"Inflow ({args.inflow_variant})")
     axes[0].grid(True, alpha=0.25)
     axes[0].legend(loc="upper right")
 
@@ -107,4 +123,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
