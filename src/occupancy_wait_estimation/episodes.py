@@ -8,7 +8,7 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 
-from kff_v2.reconcile import ReconcileConfig, reconcile_minute_flows
+from occupancy_wait_estimation.reconcile import ReconcileConfig, reconcile_minute_flows
 
 
 @dataclass(frozen=True)

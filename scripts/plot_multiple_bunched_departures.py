@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from kff_v2 import EstimateQueueOptions, ReconcileConfig, estimate_queue_from_timestamps
+from occupancy_wait_estimation import EstimateQueueOptions, ReconcileConfig, estimate_queue_from_timestamps
 
 
 def _bin_counts(df: pd.DataFrame, col: str = "timestamp") -> pd.Series:

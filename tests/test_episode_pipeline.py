@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import EpisodeDetectConfig, ReconcileConfig, detect_queue_episodes, reconcile_by_episodes
+from occupancy_wait_estimation import EpisodeDetectConfig, ReconcileConfig, detect_queue_episodes, reconcile_by_episodes
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

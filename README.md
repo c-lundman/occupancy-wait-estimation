@@ -2,7 +2,7 @@
 
 Occupancy and FIFO Wait Estimation for airport areas (e.g., border control), using timestamped in/out person-count events.
 
-Python import path remains `kff_v2`.
+Python import path remains `occupancy_wait_estimation`.
 
 ## Purpose
 
@@ -167,7 +167,7 @@ Planned solver stack:
 
 Step 3 is now implemented with a first QP reconciler:
 
-- module: `src/kff_v2/reconcile.py`,
+- module: `src/occupancy_wait_estimation/reconcile.py`,
 - public API: `reconcile_minute_flows(df: pandas.DataFrame, config: ReconcileConfig) -> pandas.DataFrame`,
 - default behavior: enforce nonnegative occupancy and adjust flows with weighted least-squares corrections.
 
@@ -216,7 +216,7 @@ Minimal interface example:
 
 ```python
 import pandas as pd
-from kff_v2 import estimate_queue_from_timestamps
+from occupancy_wait_estimation import estimate_queue_from_timestamps
 
 inflow = pd.DataFrame({"timestamp": ["2026-01-20T06:00:05Z", "2026-01-20T06:00:31Z"]})
 outflow = pd.DataFrame({"timestamp": ["2026-01-20T06:01:10Z"]})
@@ -235,7 +235,7 @@ Advanced configuration example (`options`):
 
 ```python
 import pandas as pd
-from kff_v2 import EstimateQueueOptions, estimate_queue_from_timestamps, make_reconcile_config
+from occupancy_wait_estimation import EstimateQueueOptions, estimate_queue_from_timestamps, make_reconcile_config
 
 opts = EstimateQueueOptions(
     reconcile=make_reconcile_config("trust_outflow", w_in=1.0, w_out=100.0)

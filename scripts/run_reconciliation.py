@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import (
+from occupancy_wait_estimation import (
     ReconcileConfig,
     add_fifo_wait_columns,
     correction_size_metrics,

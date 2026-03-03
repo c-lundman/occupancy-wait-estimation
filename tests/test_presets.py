@@ -1,4 +1,4 @@
-from kff_v2 import make_reconcile_config
+from occupancy_wait_estimation import make_reconcile_config
 
 
 def test_trust_outflow_preset_biases_outflow_weight() -> None:

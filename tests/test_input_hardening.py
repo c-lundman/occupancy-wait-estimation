@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from kff_v2 import ReconcileConfig, estimate_queue_from_timestamps, reconcile_minute_flows
+from occupancy_wait_estimation import ReconcileConfig, estimate_queue_from_timestamps, reconcile_minute_flows
 
 
 def test_estimate_queue_only_inflow_events_stays_physical() -> None:

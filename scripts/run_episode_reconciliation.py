@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import (
+from occupancy_wait_estimation import (
     EpisodeDetectConfig,
     ReconcileConfig,
     add_fifo_wait_columns,

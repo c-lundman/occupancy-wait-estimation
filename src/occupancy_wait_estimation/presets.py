@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Literal
 
-from kff_v2.reconcile import ReconcileConfig
+from occupancy_wait_estimation.reconcile import ReconcileConfig
 
 ReconcilePreset = Literal[
     "default",

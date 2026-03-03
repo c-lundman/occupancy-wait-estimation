@@ -1,6 +1,6 @@
 import pandas as pd
 
-from kff_v2 import ReconcileConfig, reconcile_minute_flows
+from occupancy_wait_estimation import ReconcileConfig, reconcile_minute_flows
 
 
 def test_adaptive_inflow_prior_reduces_quiet_period_injection() -> None:

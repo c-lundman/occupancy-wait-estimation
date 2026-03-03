@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import EstimateQueueOptions, ReconcileConfig, estimate_queue_from_timestamps
+from occupancy_wait_estimation import EstimateQueueOptions, ReconcileConfig, estimate_queue_from_timestamps
 
 
 def _load_events(path: Path) -> pd.DataFrame:

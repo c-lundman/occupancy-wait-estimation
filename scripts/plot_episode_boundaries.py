@@ -9,7 +9,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from kff_v2 import EpisodeDetectConfig, detect_queue_episodes, estimate_queue_from_timestamps
+from occupancy_wait_estimation import EpisodeDetectConfig, detect_queue_episodes, estimate_queue_from_timestamps
 
 
 def parse_args() -> argparse.Namespace:

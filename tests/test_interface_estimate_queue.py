@@ -1,6 +1,6 @@
 import pandas as pd
 
-from kff_v2 import EpisodeDetectConfig, EstimateQueueOptions, estimate_queue_from_timestamps
+from occupancy_wait_estimation import EpisodeDetectConfig, EstimateQueueOptions, estimate_queue_from_timestamps
 
 
 def test_estimate_queue_output_schema() -> None:

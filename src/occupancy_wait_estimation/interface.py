@@ -8,10 +8,10 @@ import warnings
 
 import pandas as pd
 
-from kff_v2.episodes import EpisodeDetectConfig, detect_queue_episodes, reconcile_by_episodes
-from kff_v2.fifo import add_fifo_wait_columns
-from kff_v2.presets import make_reconcile_config
-from kff_v2.reconcile import ReconcileConfig, reconcile_minute_flows
+from occupancy_wait_estimation.episodes import EpisodeDetectConfig, detect_queue_episodes, reconcile_by_episodes
+from occupancy_wait_estimation.fifo import add_fifo_wait_columns
+from occupancy_wait_estimation.presets import make_reconcile_config
+from occupancy_wait_estimation.reconcile import ReconcileConfig, reconcile_minute_flows
 
 
 @dataclass(frozen=True)

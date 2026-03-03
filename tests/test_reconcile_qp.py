@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import ReconcileConfig, reconcile_minute_flows
+from occupancy_wait_estimation import ReconcileConfig, reconcile_minute_flows
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

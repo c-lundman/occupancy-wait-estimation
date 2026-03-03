@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from kff_v2 import ReconcileConfig, reconcile_minute_flows
+from occupancy_wait_estimation import ReconcileConfig, reconcile_minute_flows
 
 
 def test_multiplicative_inflow_prior_promotes_proportional_scaling() -> None:

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from kff_v2 import ReconcileConfig, reconcile_minute_flows
+from occupancy_wait_estimation import ReconcileConfig, reconcile_minute_flows
 
 
 def test_relative_outflow_weighting_discourages_low_flow_outflow_adjustment() -> None:

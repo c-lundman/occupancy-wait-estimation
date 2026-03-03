@@ -1,6 +1,6 @@
 import pandas as pd
 
-from kff_v2 import (
+from occupancy_wait_estimation import (
     EpisodeDetectConfig,
     EstimateQueueOptions,
     ReconcileConfig,

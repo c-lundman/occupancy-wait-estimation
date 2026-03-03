@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kff_v2 import add_fifo_wait_columns
+from occupancy_wait_estimation import add_fifo_wait_columns
 
 try:
     import matplotlib.pyplot as plt

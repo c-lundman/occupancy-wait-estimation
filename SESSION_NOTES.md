@@ -8,7 +8,7 @@
 ## Core Public API
 
 - `estimate_queue_from_timestamps(in_df, out_df, options=None, return_debug=False)`
-- Module: `src/kff_v2/interface.py`
+- Module: `src/occupancy_wait_estimation/interface.py`
 
 Default output:
 
@@ -33,10 +33,10 @@ Default output:
 
 ## Main Modules
 
-- Reconciliation: `src/kff_v2/reconcile.py`
-- Episode detection/splitting: `src/kff_v2/episodes.py`
-- FIFO waits: `src/kff_v2/fifo.py`
-- Metrics helpers: `src/kff_v2/metrics.py`
+- Reconciliation: `src/occupancy_wait_estimation/reconcile.py`
+- Episode detection/splitting: `src/occupancy_wait_estimation/episodes.py`
+- FIFO waits: `src/occupancy_wait_estimation/fifo.py`
+- Metrics helpers: `src/occupancy_wait_estimation/metrics.py`
 
 ## Data + Scripts
 
